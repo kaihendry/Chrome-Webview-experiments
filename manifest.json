@@ -1,0 +1,10 @@
+{
+  "name": "Webview open and close",
+  "version": "1",
+  "background_page": "background.html",
+  "app": {
+    "launch": {
+      "local_path": "main.html"
+    }
+  }
+}
