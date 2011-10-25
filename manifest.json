@@ -1,10 +1,16 @@
 {
-  "name": "Webview open and close",
-  "version": "1",
-  "background_page": "background.html",
-  "app": {
-    "launch": {
-      "local_path": "main.html"
-    }
-  }
+	"name": "Webview API prototype",
+	"version": "1",
+	"background_page": "background.html",
+	"permissions": [
+		"tabs"
+		],
+	"app": {
+		"launch": {
+			"local_path": "main.html"
+		}
+	},
+	"icons": { "16": "icon16.png",
+		"48": "icon48.png",
+		"128": "icon128.png" }
 }
