@@ -1,0 +1,10 @@
+# BUGS
+
+URLs that redirect aren't captured by chrome.tabs.onUpdated
+For example, example.com redirects to <http://www.iana.org/domains/example> and the closeURL is not matched
+
+# TODO
+
+Turn tabs into a tabid, url store
+<http://stackoverflow.com/questions/4720175/how-to-get-tabs-before-chrome-browser-window-closed>
+We need this since we need to return the URL if it is closed manually

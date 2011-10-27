@@ -1,21 +1,28 @@
-closeURLs = ["http://example.com///", "http://close.me.2", "http://close.me.3", "http://kaihendry.greptweet.com/?foo", "http://hendry.iki.fi///"];
+closeURLs = ["http://example.com///", "http://close.me.2", "http://close.me.3", "http://kaihendry.greptweet.com/?foo", "http://hendry.iki.fi"];
 
-function assert(a, b, message) {
-	if (a != b) {
-		console.log("Failed to match " + message + " " + a + " != " + b);
-		return false;
+function propsEqual(a, b, propNames) {
+	var result = true;
+	for (var i in propNames) {
+		var prop = propNames[i];
+		if (a[prop] != b[prop]) {
+			console.log("Failed to match " + prop + ": " + a[prop] + " != " + b[prop]);
+			result = false;
+		}
 	}
-	return true;
+	return result;
 }
 
 function closematch(input) {
-	if (undefined === input) { return false; }
+	if (undefined === input) {
+		return false;
+	}
 	// 1. If the widget contains zero close URL params, return false and terminate this algorithm.
-	if (undefined === closeURLs) { return false; }
+	if (undefined === closeURLs) {
+		return false;
+	}
 	// Let input be the URL to be matched.
 	// http://www.whatwg.org/specs/web-apps/current-work/multipage/urls.html#parsing-urls
 	// Let parsedInput be the result of parsing input into its components parts.
-
 	var parsedInput = document.createElement('a');
 	parsedInput.href = input;
 
@@ -26,14 +33,10 @@ function closematch(input) {
 
 		// Compare input to the close-url. If any part of these two URLs differ other than the <query> component, return false.
 		// "other than the <query> component"
-
-		if (!assert(parsedInput.protocol, cu.protocol, "protocol") ||
-				!assert(parsedInput.hostname, cu.hostname, "hostname") ||
-				!assert(parsedInput.port, cu.port, "port") ||
-				!assert(parsedInput.pathname, cu.pathname, "pathname") ||
-				!assert(parsedInput.hash, cu.hash, "hash")) {
-					continue;
-				}
+		if (!propsEqual(parsedInput, cu, ["protocol", "port", "hostname", "pathname", "hash"])) {
+			console.log("Skipping.");
+			continue;
+		}
 
 		if (cu.search) {
 
@@ -59,7 +62,9 @@ function closematch(input) {
 						console.log(cname + " matched with " + iname);
 					}
 				}
-				if (!present) { return false; }
+				if (!present) {
+					return false;
+				}
 			}
 		}
 		return true;
@@ -76,12 +81,16 @@ function opened(tab) {
 	chrome.tabs.onUpdated.addListener(function(id, changeInfo, tab) {
 
 		// Only listen to the tab we opened (assuming just the one was opened)
-		if (tabs.indexOf(id) == -1) { return; }
+		if (tabs.indexOf(id) == - 1) {
+			return;
+		}
 
 		if (closematch(tab.url)) {
 			var k = tabs.indexOf(tab.id);
-			if (k == -1) { return; } // Ignore if we did not open the tab
-			tabs.splice(k,1);
+			if (k == - 1) {
+				return;
+			} // Ignore if we did not open the tab
+			tabs.splice(k, 1);
 			chrome.tabs.remove(tab.id, function() {
 				console.log(tab.id + ":" + tab.url + " closed!");
 			});
@@ -92,8 +101,10 @@ function opened(tab) {
 
 chrome.tabs.onRemoved.addListener(function(id, removeInfo) {
 	var k = tabs.indexOf(id);
-	if (k == -1) { return; } // Ignore if we did not open the tab
-	tabs.splice(k,1);
+	if (k == - 1) {
+		return;
+	} // Ignore if we did not open the tab
+	tabs.splice(k, 1);
 	console.log("User closed: " + id);
 });
 
@@ -107,3 +118,4 @@ function open(url) {
 
 webview = {};
 webview.open = open;
+
