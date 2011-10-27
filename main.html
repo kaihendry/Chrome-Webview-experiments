@@ -1,1 +1,20 @@
-<button onclick='chrome.extension.getBackgroundPage().openit()'>Open a page</button>
+<html>
+<body>
+<script>
+	bg = chrome.extension.getBackgroundPage();
+	window.deviceapis = {};
+	window.deviceapis.webview = bg.webview;
+</script>
+<button onclick='window.deviceapis.webview.open("http://example.com");'>Open a page</button>
+
+<h1><a href="https://members.wholesaleappcommunity.com/svn/rmprojects/devicespecs/Ipanema/trunk/Ipanema/html/deviceapis/webview/index.html#the-param-elements">Close URLs</a></h1>
+<pre>
+<script>
+	closeURLs = bg.closeURLs;
+	for (var i in closeURLs) {
+		document.write(closeURLs[i] + "\n");
+	}
+</script>
+</pre>
+</body>
+</html>

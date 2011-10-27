@@ -1,6 +1,7 @@
 {
 	"name": "Webview API prototype",
-	"version": "1",
+	"version": "0.2",
+	"homepage_url": "https://members.wholesaleappcommunity.com/svn/rmprojects/devicespecs/Ipanema/trunk/Ipanema/html/deviceapis/webview",
 	"background_page": "background.html",
 	"permissions": [
 		"tabs"
