@@ -71,27 +71,27 @@ function closematch(input) {
 	}
 }
 
-tabs = [];
-
 function opened(tab) {
-	tabs.push(tab.id);
+	webview[tab.id] = tab.url;
 
 	console.log("Opened: " + tab.id);
 
 	chrome.tabs.onUpdated.addListener(function(id, changeInfo, tab) {
 
-		// Only listen to the tab we opened (assuming just the one was opened)
-		if (tabs.indexOf(id) == - 1) {
+		// Ignore if we did not open the tab
+		if (!webview[id]) {
 			return;
 		}
 
+		// Store URL in webview in case user closes tab
+		webview[id] = tab.url;
+
 		if (closematch(tab.url)) {
-			var k = tabs.indexOf(tab.id);
-			if (k == - 1) {
-				return;
-			} // Ignore if we did not open the tab
-			tabs.splice(k, 1);
 			chrome.tabs.remove(tab.id, function() {
+				webview.onclose({
+					url: tab.url
+				});
+				delete webview[id];
 				console.log(tab.id + ":" + tab.url + " closed!");
 			});
 		}
@@ -100,11 +100,17 @@ function opened(tab) {
 }
 
 chrome.tabs.onRemoved.addListener(function(id, removeInfo) {
-	var k = tabs.indexOf(id);
-	if (k == - 1) {
+
+	// Ignore if we did not open the tab
+	if (!webview[id]) {
 		return;
-	} // Ignore if we did not open the tab
-	tabs.splice(k, 1);
+	}
+
+	webview.onclose({
+		url: webview[id]
+	});
+	delete webview[id];
+
 	console.log("User closed: " + id);
 });
 
@@ -118,4 +124,6 @@ function open(url) {
 
 webview = {};
 webview.open = open;
-
+webview.onclose = function(e) {
+	console.log("Closed URL: " + e.url);
+}
