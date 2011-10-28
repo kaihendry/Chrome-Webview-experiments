@@ -3,5 +3,3 @@
 URLs that redirect aren't captured by chrome.tabs.onUpdated For example,
 example.com redirects to http://www.iana.org/domains/example and the closeURL
 is not matched.
-
-Sends several events via chrome.tabs.onUpdated -> chrome.tabs.remove

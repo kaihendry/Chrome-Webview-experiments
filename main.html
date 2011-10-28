@@ -4,6 +4,7 @@
 	bg = chrome.extension.getBackgroundPage();
 	window.deviceapis = {};
 	window.deviceapis.webview = bg.webview;
+	window.deviceapis.webview.onclose = function(e) { console.log("Closed URL: " + e.url); }
 </script>
 <button onclick='window.deviceapis.webview.open("http://example.com");'>Open a page</button>
 

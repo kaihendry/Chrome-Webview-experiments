@@ -34,7 +34,6 @@ function closematch(input) {
 		// Compare input to the close-url. If any part of these two URLs differ other than the <query> component, return false.
 		// "other than the <query> component"
 		if (!propsEqual(parsedInput, cu, ["protocol", "port", "hostname", "pathname", "hash"])) {
-			console.log("Skipping.");
 			continue;
 		}
 
@@ -73,31 +72,32 @@ function closematch(input) {
 
 function opened(tab) {
 	webview[tab.id] = tab.url;
-
 	console.log("Opened: " + tab.id);
+}
 
-	chrome.tabs.onUpdated.addListener(function(id, changeInfo, tab) {
+chrome.tabs.onUpdated.addListener(function(id, changeInfo, tab) {
 
-		// Ignore if we did not open the tab
-		if (!webview[id]) {
+	// Ignore if we did not open the tab
+	if (!webview[id]) {
+		return;
+	}
+
+	// Store URL in webview in case user closes tab
+	webview[id] = tab.url;
+
+	if (closematch(tab.url)) {
+
+		// onUpdated can fire numerous times and closematch is slow so lets check webview is no already deleted
+		if (!webview[tab.id]) {
 			return;
 		}
 
-		// Store URL in webview in case user closes tab
-		webview[id] = tab.url;
+		chrome.tabs.remove(tab.id, function() {
+			console.log(tab.id + ": " + tab.url + " closed by closematch !");
+		});
+	}
 
-		if (closematch(tab.url)) {
-			chrome.tabs.remove(tab.id, function() {
-				webview.onclose({
-					url: tab.url
-				});
-				delete webview[id];
-				console.log(tab.id + ":" + tab.url + " closed!");
-			});
-		}
-
-	});
-}
+});
 
 chrome.tabs.onRemoved.addListener(function(id, removeInfo) {
 
@@ -109,13 +109,13 @@ chrome.tabs.onRemoved.addListener(function(id, removeInfo) {
 	webview.onclose({
 		url: webview[id]
 	});
+
+	// Delete after we sent the URL to onclose
 	delete webview[id];
 
-	console.log("User closed: " + id);
 });
 
 function open(url) {
-	url = url;
 	chrome.tabs.create({
 		url: url
 	},
@@ -124,6 +124,4 @@ function open(url) {
 
 webview = {};
 webview.open = open;
-webview.onclose = function(e) {
-	console.log("Closed URL: " + e.url);
-}
+webview.onclose = function(e) {}
