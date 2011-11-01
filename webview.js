@@ -1,5 +1,3 @@
-closeURLs = ["http://example.com///", "http://close.me.2", "http://close.me.3", "http://kaihendry.greptweet.com/?foo", "http://hendry.iki.fi"];
-
 function propsEqual(a, b, propNames) {
 	var result = true;
 	for (var i in propNames) {
@@ -13,11 +11,12 @@ function propsEqual(a, b, propNames) {
 }
 
 function closematch(input) {
-	if (undefined === input) {
+	if (!input) {
 		return false;
 	}
+
 	// 1. If the widget contains zero close URL params, return false and terminate this algorithm.
-	if (undefined === closeURLs) {
+	if (typeof webview.closeURLs == 'undefined' || webview.closeURLs.length == 0) {
 		return false;
 	}
 	// Let input be the URL to be matched.
@@ -26,10 +25,10 @@ function closematch(input) {
 	var parsedInput = document.createElement('a');
 	parsedInput.href = input;
 
-	for (var c in closeURLs) {
+	for (var c in webview.closeURLs) {
 		// For each close-url (cu) in the close URL params:
 		var cu = document.createElement('a');
-		cu.href = closeURLs[c];
+		cu.href = webview.closeURLs[c];
 
 		// Compare input to the close-url. If any part of these two URLs differ other than the <query> component, return false.
 		// "other than the <query> component"
@@ -124,4 +123,6 @@ function open(url) {
 
 webview = {};
 webview.open = open;
-webview.onclose = function(e) {}
+webview.closeURLs = []; // Should be overridden
+webview.onclose = function(e) {} // Should be overridden
+

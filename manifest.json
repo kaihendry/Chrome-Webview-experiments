@@ -1,17 +1,17 @@
 {
 	"name": "Webview API prototype",
-	"version": "0.2",
+	"version": "0.3",
 	"homepage_url": "https://members.wholesaleappcommunity.com/svn/rmprojects/devicespecs/Ipanema/trunk/Ipanema/html/deviceapis/webview",
 	"background_page": "background.html",
 	"permissions": [
-		"tabs", "notifications"
+		"tabs"
 		],
 	"app": {
 		"launch": {
 			"local_path": "main.html"
 		}
 	},
-	"icons": { "16": "icon16.png",
-		"48": "icon48.png",
-		"128": "icon128.png" }
+	"icons": { "16": "icons/16.png",
+		"48": "icons/48.png",
+		"128": "icons/128.png" }
 }
