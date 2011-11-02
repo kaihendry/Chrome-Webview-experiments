@@ -1,0 +1,9 @@
+body {
+font-family: 'PT Sans', 'Trebuchet MS', Arial, sans-serif;
+}
+textarea {
+width: 50em;
+height: 30em;
+border: 1em solid #cccccc;
+padding: 1em;
+}

@@ -32,10 +32,11 @@ function closematch(input) {
 
 		// Compare input to the close-url. If any part of these two URLs differ other than the <query> component, return false.
 		// "other than the <query> component"
-		if (!propsEqual(parsedInput, cu, ["protocol", "port", "hostname", "pathname", "hash"])) {
+		if (!propsEqual(parsedInput, cu, ["protocol", "port", "hostname", "pathname"])) {
 			continue;
 		}
 
+		// what about hash ?
 		if (cu.search) {
 
 			if (!parsedInput.search) {

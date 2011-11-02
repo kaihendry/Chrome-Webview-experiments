@@ -2,25 +2,18 @@
 <html>
 <head>
 	<title>Webview prototype</title>
-<style>
-body {
-font-family: 'PT Sans', 'Trebuchet MS', Arial, sans-serif;
-}
-textarea {
-width: 50em;
-height: 30em;
-border: 1em solid #cccccc;
-padding: 1em;
-}
-</style>
-</head>
-<body>
+	<link rel="stylesheet" type="text/css" href="style.css">
 <script>
 	bg = chrome.extension.getBackgroundPage();
 	window.deviceapis = {};
 	window.deviceapis.webview = bg.webview;
 	window.deviceapis.webview.onclose = function(e) { console.log("Closed URL: " + e.url); }
 </script>
+</head>
+<body>
+
+<p>Try <a href="facebook.html">Facebook "Implicit Grant Flow" with Webview example</a></p>
+
 <button onclick='window.deviceapis.webview.open("http://example.com");'>Open a Web page</button>
 <button onclick='window.deviceapis.webview.open("closeme.html");'>Open a local page</button>
 
@@ -63,6 +56,8 @@ function getcloseURLs() {
 ta.onkeyup = getcloseURLs;
 getcloseURLs();
 </script>
+
+<p><a href="https://github.com/kaihendry/Chrome-Webview-experiments">Source code</a></p>
 
 </body>
 </html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Client Flow Example</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+
+<script>
+bg = chrome.extension.getBackgroundPage();
+window.deviceapis = {};
+window.deviceapis.webview = bg.webview;
+
+// redirect_uri
+window.deviceapis.webview.closeURLs = ["http://tests.wacapps.net"]; // Should be http://tests.wacapps.net/#access_token probably
+
+	function displayUser(user) {
+		var userName = document.getElementById('userName');
+		var greetingText = document.createTextNode('Greetings, '
+		+ user.name + '.');
+		userName.appendChild(greetingText);
+	}
+
+	// https://developers.facebook.com/apps/298489836835737/summary
+	var appID = "298489836835737";
+	function o() {
+		var path = 'https://www.facebook.com/dialog/oauth?';
+		var queryParams = ['client_id=' + appID,
+		'redirect_uri=' + "http://tests.wacapps.net",
+		'response_type=token'];
+		var query = queryParams.join('&');
+		var url = path + query;
+		window.deviceapis.webview.open(url);
+	}
+
+	// Comes back as a hash (not a query)
+	// http://tests.wacapps.net/#access_token=AAAEPeZASxk5kBAGTak879itS61qpfrAZBuCZAbIyySGjtWVJxQwqw20PAsQNAXq5pQIUWaCVnuj39PF5813URcA8fSpqUzFZBQ1hCTP7LAZDZD&expires_in=4255
+
+		window.deviceapis.webview.onclose = function(e) { // Should be a location object to begin with?
+		console.log("Closed URL: " + e.url);
+		var url = document.createElement('a');
+		url.href = e.url;
+		var accessToken = url.hash.substring(1);
+		console.log(accessToken);
+		var path = "https://graph.facebook.com/me?";
+		var queryParams = [accessToken, 'callback=displayUser'];
+		var query = queryParams.join('&');
+		var url = path + query;
+
+		// use jsonp to call the graph
+		var script = document.createElement('script');
+		script.src = url;
+		document.body.appendChild(script);
+	}
+</script>
+<p id="userName"></p>
+<button onclick="o();">Oauth</button>
+
+<p><a href="/imgs/facebook_app_setup.png">Facebook app setup</a></p>
+</body>
+</html>
