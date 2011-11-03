@@ -1,15 +1,19 @@
-# BUGS
+BUGS
+----
 
 URLs that redirect aren't captured by chrome.tabs.onUpdated
 
 For example, example.com redirects to http://www.iana.org/domains/example and
 the closeURL is not matched. :(
 
-# TODO
+TODO
+----
 
-## Build test suite
+Build test suite
+================
 
-## Hash as well as params
+Hash as well as params
+======================
 
 Currently webview.js is iterating through ?search params. It should proabably do #hash params too.
 
