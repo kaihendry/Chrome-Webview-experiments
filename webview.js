@@ -10,23 +10,23 @@ function propsEqual(a, b, propNames) {
 	return result;
 }
 
-function query(a, b, propNames) {
+function query(a, b, p) {
 
 	// if closeURL does not have a query string just return
-	if (!b.search) {
+	if (!b[p]) {
 		return true
 	}
 
-	if (!a.search) { // if closeURL has a query string and input doesn't we have a problem
+	if (!a[p]) { // if closeURL has a query string and input doesn't we have a problem
 		console.log("Input has no query string");
 		return false;
 	}
 
 	// If input contains query component, let input-query be the result of splitting the query component into name/value pairs.
-	inamevalue = a.search.substring(1).split("&");
+	inamevalue = a[p].substring(1).split("&");
 
 	// If close-url contains query component, let close-query be the result of splitting the query component into name/value pairs.
-	cnamevalue = b.search.substring(1).split("&");
+	cnamevalue = b[p].substring(1).split("&");
 
 	// If the name-value pairs of close-query are not present (though exactly matching) in the input-query, then return false
 	for (var i in cnamevalue) {
@@ -39,7 +39,9 @@ function query(a, b, propNames) {
 				console.log(cname + " matched with " + iname);
 			}
 		}
-		if (!present) { return false; }
+		if (!present) {
+			return false;
+		}
 	}
 	return true;
 }
@@ -70,8 +72,12 @@ function closematch(input) {
 			continue;
 		}
 
-		if (!query(parsedInput, cu, ["search", "hash"])) {
-			return false;
+		if (!query(parsedInput, cu, "search")) {
+			continue;
+		}
+
+		if (!query(parsedInput, cu, "hash")) {
+			continue;
 		}
 
 		return true;

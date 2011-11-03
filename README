@@ -9,14 +9,4 @@ the closeURL is not matched. :(
 TODO
 ----
 
-Build test suite
-================
-
-Hash as well as params
-======================
-
-Currently webview.js is iterating through ?search params. It should proabably do #hash params too.
-
-# the onclose callback [url](https://members.wholesaleappcommunity.com/svn/rmprojects/devicespecs/Ipanema/trunk/Ipanema/html/deviceapis/webview/index.html#the-url-attribute) is a little unclear to me
-
-onclose events function should proabably return a location object to avoid creating a URL element to access url.hash or url.search
+* Build formal test suite
